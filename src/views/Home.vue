@@ -18,7 +18,7 @@ export default {
 
        
         return{
-            onOpenForm: () => store.commit('SET_SHOW_MENU', true)
+            onOpenForm: () => store.commit('SET_SHOW_MODAL', true)
 
         }
     }
@@ -32,6 +32,10 @@ button{
     color: #fff;
     margin-bottom: 15px;
     padding: 10px;
+    cursor: pointer;
+     &:hover{
+        opacity: 0.8;
+     }
 }
 h1{
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;

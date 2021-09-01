@@ -6,6 +6,11 @@ const routes = [
     name: 'home',
     component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue')
   },
+  {
+    path: '/:id',
+    name: 'friend',
+    component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue')
+  },
   
 ]
 

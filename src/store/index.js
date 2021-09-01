@@ -5,7 +5,7 @@ export default createStore({
     show: false
   },
   mutations: {
-    SET_SHOW_MENU(state, payload){
+    SET_SHOW_MODAL(state, payload){
       state. show = payload
     }
   },
