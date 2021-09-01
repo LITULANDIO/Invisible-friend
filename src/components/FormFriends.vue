@@ -12,12 +12,20 @@
                     <input :class="{'border-red': _void}" type="text" placeholder="Last name friend" v-model="lastName">
                 </div>
                 <div class="form-upload">
-                    <button>Upload image</button>
+                    <input type="file"
+                    @change="onSelectedImage"
+                    v-show="false"
+                    accept="image/png, image/jpeg"
+                    id="file"
+                   
+                    >
+                    <button @click="onSelectImage">Upload image</button>
                 </div>
                 <div class="form-save">
                     <button type="submit">Guardar</button>
                 </div>
             </form>
+            <img v-if="localImage" :src="localImage" />
         </div>
     </div>
 </template>
@@ -35,22 +43,51 @@ export default {
         const name = ref('');
         const lastName = ref('');
         const _void = ref(false);
-        const { createFriend, getFriends } = requestFriends();
+        const localImage = ref(null);
+        const file = ref(null)
+        const fileCloudinary = ref(null);
+        const { createFriend, getFriends, uploadImage } = requestFriends();
         
         
         const saveFriend = async () =>{
+            localImage.value = await uploadImage(file.value);
+            //console.log({picture})
             if(!name.value || !lastName.value){
                 return _void.value = true;
             }else{
-             await createFriend({name: name.value, lastName: lastName.value, picture: ""})
-             name.value = '';
-             lastName.value = '';
+                setTimeout(async () =>{
+                    await createFriend({name: name.value, lastName: lastName.value, picture: fileCloudinary.value})
+                },2000)
+            //  name.value = '';
+            //  lastName.value = '';
             }
         }
 
         const getInvisibleFriends = async () =>{
            const friends = await getFriends();
            console.log(friends);
+        }
+        getInvisibleFriends()
+
+        const onSelectedImage = async (event) =>{
+            const file = event.target.files[0];
+
+            if(!file){
+                localImage.value = null;
+                file.value = null;
+                return
+            }else{
+                file.value = file;
+                console.log(file.value)
+                const fr = new FileReader();
+                fr.onload = () => localImage.value  = fr.result
+                fr.readAsDataURL(file)
+                fileCloudinary.value = await uploadImage(file.value);
+            }
+        }
+
+        const onSelectImage = () =>{
+            document.querySelector('#file').click()
         }
 
         watchEffect(() =>{
@@ -65,7 +102,10 @@ export default {
             saveFriend,
             _void,
             onClose: () => store.commit('SET_SHOW_MODAL', false),
-            showMenu: computed(() => store.state.show)
+            showMenu: computed(() => store.state.show),
+            onSelectedImage,
+            localImage,
+            onSelectImage
         }
     }
 
