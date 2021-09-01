@@ -44,30 +44,20 @@ export default {
         const lastName = ref('');
         const _void = ref(false);
         const localImage = ref(null);
-        const file = ref(null)
         const fileCloudinary = ref(null);
-        const { createFriend, getFriends, uploadImage } = requestFriends();
+        const { createFriend, uploadImage } = requestFriends();
         
         
         const saveFriend = async () =>{
-            localImage.value = await uploadImage(file.value);
-            //console.log({picture})
             if(!name.value || !lastName.value){
                 return _void.value = true;
             }else{
-                setTimeout(async () =>{
-                    await createFriend({name: name.value, lastName: lastName.value, picture: fileCloudinary.value})
-                },2000)
-            //  name.value = '';
-            //  lastName.value = '';
+                await createFriend({name: name.value, lastName: lastName.value, picture: fileCloudinary.value})
+                name.value = '';
+                lastName.value = '';
+                localImage.value = null;
             }
         }
-
-        const getInvisibleFriends = async () =>{
-           const friends = await getFriends();
-           console.log(friends);
-        }
-        getInvisibleFriends()
 
         const onSelectedImage = async (event) =>{
             const file = event.target.files[0];
@@ -78,7 +68,6 @@ export default {
                 return
             }else{
                 file.value = file;
-                console.log(file.value)
                 const fr = new FileReader();
                 fr.onload = () => localImage.value  = fr.result
                 fr.readAsDataURL(file)

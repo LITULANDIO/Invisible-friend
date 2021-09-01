@@ -2,23 +2,29 @@
   <div>
       <h1>Friends Invisible</h1>
       <button @click="onOpenForm">Create friends invisible</button>
+      <div class="container">
         <FormFriends />
+        <ListFriends :friends="friends" />
+      </div>
   </div>
 </template>
 
 <script>
 import FormFriends from '@/components/FormFriends';
+import ListFriends from '@/components/ListFriends';
 import { useStore } from 'vuex';
+import { computed } from 'vue';
 
 export default {
     name: 'Home',
-    components:{ FormFriends },
+    components:{ FormFriends, ListFriends },
     setup(){
         const store = useStore();
+        console.log(store)
 
-       
         return{
-            onOpenForm: () => store.commit('SET_SHOW_MODAL', true)
+            onOpenForm: () => store.commit('SET_SHOW_MODAL', true),
+            friends: computed(() => store.getters['getFriends'])
 
         }
     }
@@ -39,6 +45,9 @@ button{
 }
 h1{
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.container{
+    display: flex;
 }
 
 </style>

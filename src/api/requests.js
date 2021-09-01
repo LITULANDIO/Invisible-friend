@@ -32,7 +32,6 @@ export default() =>{
 
             const url = 'https://api.cloudinary.com/v1_1/skylab/image/upload'
             const { data } = await axios.post(url, formData)
-            console.log('upload image', data)
             return data.secure_url
 
         }catch(error){
