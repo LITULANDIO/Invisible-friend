@@ -32,7 +32,6 @@
 
 <script>
 import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
 import { computed, ref, watchEffect } from 'vue';
 import requestFriends from '../api/requests';
 
@@ -45,7 +44,7 @@ export default {
         const _void = ref(false);
         const localImage = ref(null);
         const fileCloudinary = ref(null);
-        const { createFriend, uploadImage } = requestFriends();
+        const { createFriend, getFriends, uploadImage } = requestFriends();
         
         
         const saveFriend = async () =>{
@@ -53,10 +52,17 @@ export default {
                 return _void.value = true;
             }else{
                 await createFriend({name: name.value, lastName: lastName.value, picture: fileCloudinary.value})
+                getInvisibleFriends();
                 name.value = '';
                 lastName.value = '';
                 localImage.value = null;
             }
+        }
+
+        const getInvisibleFriends = async () =>{
+            const friends = await getFriends();
+            store.commit('SET_LIST_FRIENDS', friends)
+            console.log(friends);
         }
 
         const onSelectedImage = async (event) =>{
@@ -107,6 +113,7 @@ export default {
     background-color: transparet;
     display: flex;
     margin-top: 15px;
+    position: absolute;
     transform: translateX(-30em);
     transition: transform 0.9s ease;
      &.open{

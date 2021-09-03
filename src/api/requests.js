@@ -1,10 +1,11 @@
 import invisibleFriendsApi from '@/api/api.js';
 import axios from 'axios';
+import { useStore } from 'vuex';
 
 export default() =>{
 
-    const createFriend = async({name, lastName, picture = "holi"}) =>{
-        const dataSave = { name, lastName, picture };
+    const createFriend = async({name, lastName, picture, selected = false}) =>{
+        const dataSave = { name, lastName, picture, selected };
         const { data } = await invisibleFriendsApi.post(`/persons.json`, dataSave)
         dataSave.id = data.name
     }
@@ -20,6 +21,14 @@ export default() =>{
             })
         }
         return friends;
+    }
+
+    const updateFriends = async ({id, name, lastName, picture, selected}) =>{
+        const store = useStore();
+        const dataToSave = { id, name, lastName, picture, selected };
+        await invisibleFriendsApi.put(`/persons/${id}.json`, dataToSave)
+
+        //store.commit('SET_LIST_FRIENDS', {...friend})
     }
 
     const uploadImage = async (file) =>{
@@ -43,7 +52,8 @@ export default() =>{
     return{
         createFriend,
         getFriends,
-        uploadImage
+        uploadImage,
+        updateFriends
     }
 
 }

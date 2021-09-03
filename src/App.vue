@@ -5,7 +5,6 @@
 <script>
 import requestFriends from '@/api/requests';
 import { useStore } from 'vuex';
-import { watchEffect } from 'vue';
 
 export default{
   name: 'App',
@@ -20,9 +19,8 @@ export default{
         console.log(friends);
     }
 
-    watchEffect(() =>{
-      getInvisibleFriends();
-    })
+    getInvisibleFriends();
+    
 
   }
 }

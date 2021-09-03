@@ -16,6 +16,10 @@ export default createStore({
     },
     SET_LIST_FRIENDS(state, payload){
       state.fiends = payload
+    },
+    UPDATE_FRIENDS(state, friend){
+      const idx = state.fiends.map(e => e.id).indexOf(friend.id)
+      state.fiends[idx] = friend
     }
   },
   actions: {
