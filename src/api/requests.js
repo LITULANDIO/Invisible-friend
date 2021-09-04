@@ -14,11 +14,13 @@ export default() =>{
     const getFriends = async () =>{
         const { data } = await invisibleFriendsApi.get(`/persons.json`)
         const friends = [];
-        for(let id of Object.keys( data )){
-            friends.push({
-                id,
-                ...data[id]
-            })
+        if(data){
+            for(let id of Object.keys( data )){
+                friends.push({
+                    id,
+                    ...data[id]
+                })
+            }
         }
         return friends;
     }
@@ -29,6 +31,11 @@ export default() =>{
         await invisibleFriendsApi.put(`/persons/${id}.json`, dataToSave)
 
         //store.commit('SET_LIST_FRIENDS', {...friend})
+    }
+
+    const deleteFriend = async({id, name, lastName, picture, selected}) =>{
+        const dataToSave = { id, name, lastName, picture, selected };
+        await invisibleFriendsApi.delete(`/persons/${id}.json`, dataToSave)
     }
 
     const uploadImage = async (file) =>{
@@ -53,7 +60,8 @@ export default() =>{
         createFriend,
         getFriends,
         uploadImage,
-        updateFriends
+        updateFriends,
+        deleteFriend
     }
 
 }

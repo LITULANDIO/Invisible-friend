@@ -3,7 +3,7 @@
       <h1>Friends Invisible</h1>
       <button @click="onOpenForm">Create friends invisible</button>
         <FormFriends />
-        <ListFriends :friends="friends" :idFriend="id" />
+        <ListFriends :friends="friends" />
   </div>
 </template>
 
@@ -18,10 +18,10 @@ export default {
     components:{ FormFriends, ListFriends },
     setup(){
         const store = useStore();
-    
+        
         return{
             onOpenForm: () => store.commit('SET_SHOW_MODAL', true),
-            friends: computed(() => store.getters['getFriends']),
+            friends: computed(() => store.getters['getFriends'])
         }
     }
 

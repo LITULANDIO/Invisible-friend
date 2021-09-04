@@ -7,23 +7,32 @@
             :src="friend.picture" 
             :alt="friend.name" 
             :id="friend.id" 
-            :class="isCardSelected(friend.selected)? 'visible' : 'hidden'"
+            :class="isCardSelected(friend.selected)? 'show-friend' : 'hide-friend'"
             width="200" height="300"
         />        
-        <img :id="friend.id" :src="require('@/assets/question.svg')" @click="showCardFriend(friend)" />
+        <img  
+            :class="isCardSelected(friend.selected)? 'hide-svg' : 'show-svg'" 
+            :id="friend.id" 
+            :src="require('@/assets/question.svg')" 
+            @click="showCardFriend(friend)" 
+        />
       </div>
-
   </div>
+<Modal v-if="showModal" @onAcceptFriend="onAcceptFriend" />
 </div>
 </template>
 
 <script>
-import { useRouter } from 'vue-router';
+import { ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import requestsFriends from '../api/requests';
+import Modal from '@/components/Modal';
+
 
 export default {
     name: 'ListFriends',
+    components:{ Modal },
     props:{
         friends:{
             type: Array,
@@ -31,16 +40,18 @@ export default {
         }
     },
     setup(props, {emit}){
-        const router = useRouter()
+        const router = useRouter();
+        const route = useRoute()
         const store = useStore();
-        const { updateFriends } = requestsFriends();
+        const showModal = ref(false);
+        const { getFriends ,updateFriends, deleteFriend } = requestsFriends();
 
         const isCardSelected = (isFriend) =>{
            return isFriend;
-
         }
+     
         const showCardFriend = async (friend) =>{
-
+            showModal.value = true;
             router.push({name: 'home', query:{ id: friend.id }})
 
             props.friends.forEach(async(inv) =>{
@@ -56,9 +67,38 @@ export default {
             })
         }
 
+        const onAcceptFriend = async () =>{
+            //router.push({name: 'accept'})
+            const friendly = JSON.parse(JSON.stringify(props.friends));
+
+           props.friends.filter(async(friend) =>{
+                if(friend.selected){
+                    console.log('entra per eliminar')
+                    await deleteFriend(
+                        {
+                            id: friend.id, 
+                            name: friend.name, 
+                            lastName: friend.lastName, 
+                            picture: friend.picture, 
+                            selected: friend.selected 
+                        })
+                getInvisibleFriends();
+                }
+            })
+            if(route.query.id) return route.query.id = '';
+            showModal.value = false;
+        }
+
+         const getInvisibleFriends = async () =>{
+            const friends = await getFriends();
+            store.commit('SET_LIST_FRIENDS', friends)
+        }   
+
         return{
         showCardFriend,
-        isCardSelected
+        isCardSelected,
+        showModal,
+        onAcceptFriend
         }
     }
 
@@ -66,18 +106,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.visible{
-    display: block !important;
-    border-radius: 20px;
-    width: 100%;
-
-}
-.hidden{
-    filter: brightness(0);
-    width: 100%;
-    cursor: pointer;
-    border-radius: 20px;
-}
 .container{
     display: flex;
     justify-content: center;
@@ -103,6 +131,25 @@ export default {
                 position: relative;
                 width: 200px;
                 position: absolute;
+            }
+            .show-friend{
+                display: block !important;
+                border-radius: 20px;
+                width: 100%;
+
+            }
+            .hide-friend{
+                filter: brightness(0);
+                width: 100%;
+                border-radius: 20px;
+            }
+            .show-svg{
+                display: block;
+                cursor: pointer;
+                width: 100%;
+            }
+            .hide-svg{
+                display: none;
             }
         }
     }
