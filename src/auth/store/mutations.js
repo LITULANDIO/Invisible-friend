@@ -1,3 +1,6 @@
+import { useRouter } from "vue-router"
+import router from "../../router"
+
 export const loginUser = ( state, {user, idToken, refreshToken} ) =>{
 
     if(idToken){
@@ -23,5 +26,7 @@ export const logout = (state) =>{
 
     localStorage.removeItem('idToken')
     localStorage.removeItem('refreshToken')
+    router.push({name: 'login'})
+
 
 }

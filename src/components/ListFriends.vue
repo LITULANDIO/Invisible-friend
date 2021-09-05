@@ -140,6 +140,7 @@ export default {
                 filter: brightness(0);
                 width: 100%;
                 border-radius: 20px;
+                opacity: 0.9;
             }
             .show-svg{
                 display: block;
