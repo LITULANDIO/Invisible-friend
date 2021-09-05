@@ -1,8 +1,8 @@
 <template>
   <div>
       <h1>Friends Invisible</h1>
-      <button @click="onOpenForm">Create friends invisible</button>
-        <FormFriends />
+      <button v-if="username == 'litus'" @click="onOpenForm">Create friends invisible</button>
+        <FormFriends v-if="username == 'litus'"/>
         <ListFriends :friends="friends" />
   </div>
 </template>
@@ -12,16 +12,19 @@ import FormFriends from '@/components/FormFriends';
 import ListFriends from '@/components/ListFriends';
 import { useStore } from 'vuex';
 import { computed } from 'vue';
-
+import useAuth from '../auth/composables/useAuth';
+ 
 export default {
     name: 'Home',
     components:{ FormFriends, ListFriends },
     setup(){
         const store = useStore();
-        
+        const { username } = useAuth();
+        console.log(username.value)
         return{
             onOpenForm: () => store.commit('SET_SHOW_MODAL', true),
-            friends: computed(() => store.getters['getFriends'])
+            friends: computed(() => store.getters['getFriends']),
+            username
         }
     }
 

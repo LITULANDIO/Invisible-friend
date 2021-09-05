@@ -1,4 +1,4 @@
-import invisibleFriendsApi from '@/api/api.js';
+import invisibleFriendsApi from '@/api/apiFriends.js';
 import axios from 'axios';
 import { useStore } from 'vuex';
 

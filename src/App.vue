@@ -5,12 +5,14 @@
 <script>
 import requestFriends from '@/api/requests';
 import { useStore } from 'vuex';
+import useAuth from './auth/composables/useAuth';
 
 export default{
   name: 'App',
   setup(){
     const store = useStore();
     const { getFriends } = requestFriends();
+    const { authStatus, checkAuthStatus } = useAuth();
 
 
     const getInvisibleFriends = async () =>{
@@ -19,7 +21,12 @@ export default{
         console.log(friends);
     }
 
+    checkAuthStatus();
     getInvisibleFriends();
+
+    return{
+
+    }
     
 
   }

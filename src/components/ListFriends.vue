@@ -69,8 +69,6 @@ export default {
 
         const onAcceptFriend = async () =>{
             //router.push({name: 'accept'})
-            const friendly = JSON.parse(JSON.stringify(props.friends));
-
            props.friends.filter(async(friend) =>{
                 if(friend.selected){
                     console.log('entra per eliminar')
