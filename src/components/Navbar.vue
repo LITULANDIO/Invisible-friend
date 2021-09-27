@@ -1,10 +1,10 @@
 <template>
   <div id="navbar">
-      <div class="nav-left">
+      <div class="nav-left" @click="onGoHome">
         <img :src="require('@/assets/logo.svg')" alt="logo"/>
       </div>
       <div class="nav-right">
-          <div class="nav-user">
+          <div class="nav-user" @click="onGoFriend">
             <img :src="require('@/assets/user.svg')" alt="user"/>
             <span>Hola {{ username }}</span>
           </div>
@@ -12,12 +12,11 @@
             <img :src="require('@/assets/exit.svg')" title="logout" :alt="logout"/>
         </div>
       </div>
-
-    
   </div>
 </template>
 
 <script>
+import { useRouter } from 'vue-router';
 export default {
     name: 'Navbar',
     props:{
@@ -26,11 +25,12 @@ export default {
         }
     },
     setup(props,{emit}){
+        const router = useRouter();
         
-
-
         return{
-            onLogout: () => emit('onLogout')
+            onLogout: () => emit('onLogout'),
+            onGoFriend: () => emit('onGoFriend'),
+            onGoHome: () => router.push({name: 'home'})
         }
     }
 
@@ -39,6 +39,9 @@ export default {
 
 <style lang="scss" scoped>
 #navbar{
+    .nav-left{
+        cursor: pointer;
+    }
     display: flex;
     justify-content: space-between;
     align-items: center;

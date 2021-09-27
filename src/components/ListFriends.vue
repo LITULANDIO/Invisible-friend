@@ -10,12 +10,14 @@
             :class="isCardSelected(friend.selected)? 'show-friend' : 'hide-friend'"
             width="200" height="300"
         />        
-        <img  
-            :class="isCardSelected(friend.selected)? 'hide-svg' : 'show-svg'" 
+        <img 
+            v-if="!friend.active"
+            :class="[isCardSelected(friend.selected)? 'hide-svg' : 'show-svg']" 
             :id="friend.id" 
             :src="require('@/assets/question.svg')" 
             @click="showCardFriend(friend)" 
         />
+        <img v-else :src="require('@/assets/cancels.svg')"  width="180" height="180"/>
       </div>
   </div>
 <Modal v-if="showModal" @onAcceptFriend="onAcceptFriend" />
@@ -23,11 +25,13 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import requestsFriends from '../api/requests';
 import Modal from '@/components/Modal';
+import useAuth from '../auth/composables/useAuth';
+import Swal from 'sweetalert2';
 
 
 export default {
@@ -45,41 +49,75 @@ export default {
         const store = useStore();
         const showModal = ref(false);
         const { getFriends ,updateFriends, deleteFriend } = requestsFriends();
+        const { username } = useAuth();
+
 
         const isCardSelected = (isFriend) =>{
            return isFriend;
         }
+        const isCardActive =(isActive) =>{
+            return isActive;
+        }
+
+        const isSelectedFriend = async () =>{
+        const friendSelected = await store.getters['auth/friendSelected'];
+
+            let isSelected = false;
+            if(friendSelected){
+             friendSelected.forEach(sel =>{
+                   if(username.value == sel.user){
+                       isSelected = sel.active;
+                   }
+               })
+            }
+               console.log({isSelected})
+            return isSelected;
+        }
      
         const showCardFriend = async (friend) =>{
-            showModal.value = true;
+           // showModal.value = true;
             router.push({name: 'home', query:{ id: friend.id }})
-
             props.friends.forEach(async(inv) =>{
                 if(friend.id === inv.id){
-                    inv.selected = true
-                     await updateFriends({id:inv.id,name: inv.name, picture: inv.picture, selected: inv.selected})
-                    store.commit('UPDATE_FRIENDS', friend)
-                }else{
-                    inv.selected = false
-                     await updateFriends({id:inv.id,name: inv.name, picture: inv.picture, selected: inv.selected})
-                    store.commit('UPDATE_FRIENDS', friend)
-                }
+                    if(friend.name === username.value ){
+                        Swal.fire('Oops...', 'No et pots seleccionar a tu mateix, torna-ho a intentar', 'warning')
+                    }else if(await isSelectedFriend() === true){
+                         Swal.fire({
+                            title: 'Oops...',
+                            icon: 'warning',
+                            html: `Ja has escollit el teu amic invisble `+
+                            ` <a  href="/friend">Accedeix al teu perfil</a>`,
+                            })
+                    }else{
+                         Swal.fire({
+                            title: 'Genial',
+                            icon: 'success',
+                            html: `Has escollit a <strong>${inv.name}</strong> pots veure més detall al teu perfil ` +
+                            ` <a  href="/friend">Accedeix al teu perfil</a>`,
+                            showConfirmButton: false
+                            })
+                        await updateFriends({id:inv.id,name: inv.name, picture: inv.picture, selected: inv.selected, friend: username.value, active: inv.active})
+                       store.commit('UPDATE_FRIENDS', friend)
+                       store.commit('SET_FRIEND_ID',inv.id )
+                    }
+                  }
             })
         }
 
         const onAcceptFriend = async () =>{
             //router.push({name: 'accept'})
+            router.push({name: 'friend'})
            props.friends.filter(async(friend) =>{
                 if(friend.selected){
                     console.log('entra per eliminar')
-                    await deleteFriend(
-                        {
-                            id: friend.id, 
-                            name: friend.name, 
-                            lastName: friend.lastName, 
-                            picture: friend.picture, 
-                            selected: friend.selected 
-                        })
+                    // await deleteFriend(
+                    //     {
+                    //         id: friend.id, 
+                    //         name: friend.name, 
+                    //         lastName: friend.lastName, 
+                    //         picture: friend.picture, 
+                    //         selected: friend.selected 
+                    //     })
                 getInvisibleFriends();
                 }
             })
@@ -92,11 +130,17 @@ export default {
             store.commit('SET_LIST_FRIENDS', friends)
         }   
 
+        watch(() =>{
+            isSelectedFriend();
+        });
+    
+
         return{
         showCardFriend,
         isCardSelected,
         showModal,
-        onAcceptFriend
+        onAcceptFriend,
+        username
         }
     }
 
@@ -149,6 +193,10 @@ export default {
             }
             .hide-svg{
                 display: none;
+            }
+            .disable-picture{
+                opacity: 0.5;
+                pointer-events: none;
             }
         }
     }

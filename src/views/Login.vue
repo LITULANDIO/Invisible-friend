@@ -5,6 +5,7 @@
         <input type="password" v-model="userForm.password" placeholder="Contrassenya">
         <button type="submit">Iniciar sesion</button>
       </form>
+      <p @click="onGoRegister">¿No estàs registrar?</p>
   </div>
 </template>
 
@@ -32,7 +33,8 @@ export default {
 
         return{
            onLogin,
-           userForm
+           userForm,
+           onGoRegister: () => router.push({name: 'register'})
         }
     }
 }

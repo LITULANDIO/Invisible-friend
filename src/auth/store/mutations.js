@@ -30,3 +30,8 @@ export const logout = (state) =>{
 
 
 }
+
+
+export const friendSelect = (state, payload) =>{
+    state.friend.push(payload)
+}

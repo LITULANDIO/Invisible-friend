@@ -4,8 +4,8 @@ import { useStore } from 'vuex';
 
 export default() =>{
 
-    const createFriend = async({name, lastName, picture, selected = false}) =>{
-        const dataSave = { name, lastName, picture, selected };
+    const createFriend = async({name, lastName, picture, selected = false, active = false}) =>{
+        const dataSave = { name, lastName, picture, selected, active };
         const { data } = await invisibleFriendsApi.post(`/persons.json`, dataSave)
         dataSave.id = data.name
     }
@@ -25,16 +25,16 @@ export default() =>{
         return friends;
     }
 
-    const updateFriends = async ({id, name, lastName, picture, selected}) =>{
+    const updateFriends = async ({id, name, lastName, picture, selected, friend, active}) =>{
         const store = useStore();
-        const dataToSave = { id, name, lastName, picture, selected };
+        const dataToSave = { id, name, lastName, picture, selected, friend, active };
         await invisibleFriendsApi.put(`/persons/${id}.json`, dataToSave)
 
         //store.commit('SET_LIST_FRIENDS', {...friend})
     }
 
-    const deleteFriend = async({id, name, lastName, picture, selected}) =>{
-        const dataToSave = { id, name, lastName, picture, selected };
+    const deleteFriend = async({id, name, lastName, picture, selected, active}) =>{
+        const dataToSave = { id, name, lastName, picture, selected, active };
         await invisibleFriendsApi.delete(`/persons/${id}.json`, dataToSave)
     }
 

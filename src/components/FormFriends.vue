@@ -48,7 +48,7 @@ export default {
         
         
         const saveFriend = async () =>{
-            if(!name.value || !lastName.value){
+            if(!name.value || !lastName.value || !localImage){
                 return _void.value = true;
             }else{
                 await createFriend({name: name.value, lastName: lastName.value, picture: fileCloudinary.value})

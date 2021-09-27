@@ -1,5 +1,9 @@
 <template>
-<Navbar v-if="authStatus == 'authenticated'" :username="username" @onLogout="onLogout"/>
+<Navbar 
+  v-if="authStatus == 'authenticated'" 
+  :username="username" 
+  @onLogout="onLogout"
+  @onGoFriend="onGoFriend"/>
   <router-view/>
 </template>
 
@@ -9,12 +13,15 @@ import { useStore } from 'vuex';
 import useAuth from './auth/composables/useAuth';
 import Navbar from '@/components/Navbar';
 import { computed } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 
 export default{
   name: 'App',
   components: { Navbar },
   setup(){
     const store = useStore();
+    const router = useRouter();
+    const route = useRoute();
     const { getFriends } = requestFriends();
     const { authStatus, checkAuthStatus, username, logout } = useAuth();
 
@@ -25,6 +32,11 @@ export default{
         console.log(friends);
     }
 
+    const onGoFriend = () =>{
+      console.log('query', route.query.id)
+      router.push({name: 'friend' })
+    }
+
     checkAuthStatus();
     getInvisibleFriends();
 
@@ -32,7 +44,8 @@ export default{
      //username: computed(username.value)
      username,
      authStatus,
-     onLogout: () => logout()
+     onLogout: () => logout(),
+     onGoFriend
     }
     
 

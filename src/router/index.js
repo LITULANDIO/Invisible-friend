@@ -21,9 +21,13 @@ const routes = [
     component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue')
   },
   {
-    path: '/accept',
-    name: 'accept',
-    component: () => import(/* webpackChunkName: "acceptFriend" */ '@/views/AcceptFriend.vue')
+    path: '/friend',
+    name: 'friend',
+    component: () => import(/* webpackChunkName: "myfriend" */ '@/views/MyFriend.vue'),
+    // props: (route) =>{
+    //   const id = Number(route.params.id)
+    //   return isNaN( id )? { id: 1 } : { id }
+    // }
   },
   {
     path: '/register',
