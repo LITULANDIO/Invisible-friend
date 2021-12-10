@@ -1,25 +1,27 @@
 <template>
 <div class="container">
-  <div class="target-friend" v-for="friend in friends" :key="friend.id" >
-      <!-- <h1>{{ friend.name }}</h1> -->
-      <div class="picture-invisible">
-      <img 
-            :src="friend.picture" 
-            :alt="friend.name" 
-            :id="friend.id" 
-            :class="isCardSelected(friend.selected)? 'show-friend' : 'hide-friend'"
-            width="200" height="300"
-        />        
-        <img 
-            v-if="!friend.active"
-            :class="[isCardSelected(friend.selected)? 'hide-svg' : 'show-svg']" 
-            :id="friend.id" 
-            :src="require('@/assets/question.svg')" 
-            @click="showCardFriend(friend)" 
-        />
-        <img v-else :src="require('@/assets/cancels.svg')"  width="180" height="180"/>
-      </div>
-  </div>
+    <template  v-for="friend in friends" :key="friend.id">
+        <div class="target-friend" v-if="friend.category === category" >
+            <!-- <h1>{{ friend.name }}</h1> -->
+            <div class="picture-invisible">
+            <img 
+                    :src="friend.picture" 
+                    :alt="friend.name" 
+                    :id="friend.id" 
+                    :class="isCardSelected(friend.selected)? 'show-friend' : 'hide-friend'"
+                    width="200" height="300"
+                />        
+                <img 
+                    v-if="!friend.active"
+                    :class="[isCardSelected(friend.selected)? 'hide-svg' : 'show-svg']" 
+                    :id="friend.id" 
+                    :src="require('@/assets/question.svg')" 
+                    @click="showCardFriend(friend)" 
+                />
+                <img v-else :src="require('@/assets/cancels.svg')"  width="180" height="180"/>
+            </div>
+        </div>
+    </template>
 <Modal v-if="showModal" @onAcceptFriend="onAcceptFriend" />
 </div>
 </template>
@@ -41,6 +43,10 @@ export default {
         friends:{
             type: Array,
             required: true
+        },
+        category:{
+            type: String,
+            required: true
         }
     },
     setup(props, {emit}){
@@ -59,18 +65,17 @@ export default {
             return isActive;
         }
 
-        const isSelectedFriend = async () =>{
+        const isSelectedFriend = async (category) =>{
         const friendSelected = await store.getters['auth/friendSelected'];
-
             let isSelected = false;
             if(friendSelected){
              friendSelected.forEach(sel =>{
-                   if(username.value == sel.user){
+                   if(username.value == sel.user && sel.category === category){
                        isSelected = sel.active;
                    }
                })
             }
-               console.log({isSelected})
+            console.log({isSelected})
             return isSelected;
         }
      
@@ -81,11 +86,18 @@ export default {
                 if(friend.id === inv.id){
                     if(friend.name === username.value ){
                         Swal.fire('Oops...', 'No et pots seleccionar a tu mateix, torna-ho a intentar', 'warning')
-                    }else if(await isSelectedFriend() === true){
+                    }else if(await isSelectedFriend('reis') === true && friend.category === 'reis'){
                          Swal.fire({
                             title: 'Oops...',
                             icon: 'warning',
-                            html: `Ja has escollit el teu amic invisble `+
+                            html: `Ja has escollit el teu amic invisble de Reis`+
+                            ` <a  href="/friend">Accedeix al teu perfil</a>`,
+                            })
+                     }else if(await isSelectedFriend('nadal') === true && friend.category === 'nadal'){
+                         Swal.fire({
+                            title: 'Oops...',
+                            icon: 'warning',
+                            html: `Ja has escollit el teu amic invisble de Nadal `+
                             ` <a  href="/friend">Accedeix al teu perfil</a>`,
                             })
                     }else{
@@ -96,7 +108,21 @@ export default {
                             ` <a  href="/friend">Accedeix al teu perfil</a>`,
                             showConfirmButton: false
                             })
-                        await updateFriends({id:inv.id,name: inv.name, picture: inv.picture, selected: inv.selected, friend: username.value, active: inv.active})
+                        await updateFriends({
+                            id:inv.id,
+                            name: inv.name, 
+                            picture: inv.picture, 
+                            selected: inv.selected, 
+                            friend: username.value, 
+                            active: inv.active, 
+                            category: inv.category,
+                            firstWish: inv.firstWish, 
+                            secondWish: inv.secondWish, 
+                            threeWish: inv.threeWish, 
+                            fourWish: inv.fourWish, 
+                            fiveWish: inv.fiveWish
+
+                        })
                        store.commit('UPDATE_FRIENDS', friend)
                        store.commit('SET_FRIEND_ID',inv.id )
                     }

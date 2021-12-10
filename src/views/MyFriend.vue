@@ -1,7 +1,7 @@
 <template>
-  <div v-if="friend">
-      nom: {{ friend.name }}
-      <img :src="friend.picture" width="300"/>
+  <div v-for="friend in friendsTogether" :key="friend.id">
+    <FriendNadal :friend="friend" :myWishesListNadal="myWishesListNadal" />
+    <FriendReis :friend="friend" :myWishesListReis="myWishesListReis" />
   </div>
 </template>
 
@@ -9,37 +9,88 @@
 import { useStore } from 'vuex';
 import requestFriends from '@/api/requests';
 import useAuth from '@/auth/composables/useAuth';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import FriendNadal from '@/components/FriendNadal.vue';
+import FriendReis from '@/components/FriendReis.vue'
+
 
 export default {
     name: 'MyFriend',
+    components:{
+      FriendNadal,
+      FriendReis
+    },
     setup(){
         const store = useStore();
-        const friend = ref(null);
+        const friendsTogether = ref([]);
         const { getFriends, updateFriends } = requestFriends();
         const { username } = useAuth();
+        const myWishesListNadal = ref([]);
+        const myWishesListReis = ref([]);
         
         const getInvisibleFriends = async () =>{
           const friends = await getFriends();
-         friend.value = friends.find(friend => friend.friend == username.value)
+          putFriends(friends);
+          //console.log('friend =>', friend.value)
           friends.forEach(async(inv) =>{
             if(!inv.active){
                 if(inv.id == store.getters['getFriendId']){
                     inv.selected = false
-                     await updateFriends({id: inv.id, name: inv.name, picture: inv.picture, selected: inv.selected, friend: inv.friend, active: true })
-                    store.commit('auth/friendSelect', { friend: inv.friend, user: username.value, active: true })
-                    store.commit('UPDATE_FRIENDS', friend)
+                     await updateFriends({id: inv.id, name: inv.name, picture: inv.picture, selected: inv.selected, friend: inv.friend, active: true, category: inv.category })
+                    store.commit('auth/friendSelect', { friend: inv.friend, user: username.value, active: true, category: inv.category })
+                    //store.commit('UPDATE_FRIENDS', friend.value)
                  }
             }
           })
         }
+    
+        const putFriends = (friends) =>{
+          let friendNadal = null;
+          let friendReis = null;
+          friendNadal = friends.find(friend => friend.friend == username.value && friend.category === 'nadal');
+          friendReis = friends.find(friend => friend.friend == username.value && friend.category === 'reis');
+          console.log(friendNadal)
+          if(friendNadal){
+            friendsTogether.value.push(friendNadal)
+          }
+          if(friendReis){
+             friendsTogether.value.push(friendReis);
+          }
+        }
 
-        getInvisibleFriends();
-        console.log('friend selected =>',  store.getters['auth/friendSelected'])
+        const getMyProfile = async (type) =>{
+            const friends = await getFriends();
+            let myWishesNadal = [];
+            let myWishesReis = [];
+            
+            const myProfile = friends.find(my => my.name === username.value && my.category === type)
+            if(type === 'nadal' && myProfile){
+              const { firstWish, secondWish, threeWish, fourWish, fiveWish } = myProfile;
+              if(firstWish && secondWish && threeWish && fourWish && fiveWish){
+                myWishesNadal.push({wish: firstWish},{wish: secondWish},{wish: threeWish},{wish: fourWish}, {wish: fiveWish})
+                myWishesListNadal.value = myWishesNadal;
+              }
+            }
+             if(type === 'reis' && myProfile){
+                const { firstWish, secondWish, threeWish, fourWish, fiveWish } = myProfile;
+               if(firstWish && secondWish && threeWish && fourWish && fiveWish){
+                 myWishesReis.push({wish: firstWish},{wish: secondWish},{wish: threeWish},{wish: fourWish}, {wish: fiveWish})
+                 myWishesListReis.value = myWishesReis;
+               }
+             }
+        }
+
+        onMounted(async () =>{
+          getInvisibleFriends();
+          await getMyProfile('nadal');
+          await getMyProfile('reis');
+
+        })
          
-
         return{
-          friend
+          friendsTogether,
+          myWishesListReis,
+          myWishesListNadal
         }
 
     }
@@ -47,6 +98,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

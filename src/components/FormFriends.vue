@@ -1,5 +1,5 @@
 <template>
-    <div id="container-form" :class="{open: showMenu}">
+    <div id="container-form">
         <div class="form-friend">
             <div @click="onClose" class="form-close">
                 <img :src="require('@/assets/cancel.svg')" />
@@ -11,6 +11,10 @@
                 <div class="form-last-name">
                     <input :class="{'border-red': _void}" type="text" placeholder="Last name friend" v-model="lastName">
                 </div>
+                <div>
+                    Nadals <input type="radio" value="nadal" v-model="category"/>
+                    Reis <input type="radio" value="reis" v-model="category"/>
+                </div>
                 <div class="form-upload">
                     <input type="file"
                     @change="onSelectedImage"
@@ -19,6 +23,7 @@
                     id="file"
                    
                     >
+
                     <button @click="onSelectImage">Upload image</button>
                 </div>
                 <div class="form-save">
@@ -41,6 +46,7 @@ export default {
         const store = useStore();
         const name = ref('');
         const lastName = ref('');
+        const category = ref([]);
         const _void = ref(false);
         const localImage = ref(null);
         const fileCloudinary = ref(null);
@@ -51,7 +57,7 @@ export default {
             if(!name.value || !lastName.value || !localImage){
                 return _void.value = true;
             }else{
-                await createFriend({name: name.value, lastName: lastName.value, picture: fileCloudinary.value})
+                await createFriend({name: name.value, lastName: lastName.value, picture: fileCloudinary.value, category: category.value})
                 getInvisibleFriends();
                 name.value = '';
                 lastName.value = '';
@@ -100,7 +106,8 @@ export default {
             showMenu: computed(() => store.state.show),
             onSelectedImage,
             localImage,
-            onSelectImage
+            onSelectImage,
+            category
         }
     }
 
@@ -114,8 +121,8 @@ export default {
     display: flex;
     margin-top: 15px;
     position: absolute;
-    transform: translateX(-30em);
-    transition: transform 0.9s ease;
+    // transform: translateX(-30em);
+    // transition: transform 0.9s ease;
      &.open{
         transform: translateX(0em);
     }

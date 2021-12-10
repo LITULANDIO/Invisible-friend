@@ -3,7 +3,12 @@
       <h1>Friends Invisible</h1>
       <button v-if="username == 'litus'" @click="onOpenForm">Create friends invisible</button>
         <FormFriends v-if="username == 'litus'"/>
-        <ListFriends :friends="friends" />
+
+        <h2>Amic invisble Nadals</h2>
+        <ListFriends :friends="friends" category="nadal"/>
+
+         <h2>Amic invisble Reis</h2>
+        <ListFriends :friends="friends" category="reis"/>
   </div>
 </template>
 
@@ -11,7 +16,7 @@
 import FormFriends from '@/components/FormFriends';
 import ListFriends from '@/components/ListFriends';
 import { useStore } from 'vuex';
-import { computed } from 'vue';
+import { computed, onBeforeMount, onBeforeUpdate, ref } from 'vue';
 import useAuth from '@/auth/composables/useAuth';
 import requestFriends from '@/api/requests';
 
@@ -22,18 +27,34 @@ export default {
         const store = useStore();
         const { username } = useAuth();
         const { getFriends } = requestFriends();
+        const fr = computed(() => store.getters['getFriends'])
+        const friends = ref();
 
         const getInvisibleFriends = async () =>{
             const friends = await getFriends();
             store.commit('SET_LIST_FRIENDS', friends)
             console.log(friends);
         }
-        getInvisibleFriends();
-        
+
+        const getFriendsListRandom = async() =>{
+            const mixedFriends = fr.value;
+            mixedFriends.sort(() => Math.random() - 0.8);
+            friends.value = mixedFriends;
+        }
+
+        onBeforeMount(() =>{
+            getInvisibleFriends();
+            getFriendsListRandom();
+            
+        });
+        onBeforeUpdate(() =>{
+            getFriendsListRandom();
+        });
+
         return{
             onOpenForm: () => store.commit('SET_SHOW_MODAL', true),
-            friends: computed(() => store.getters['getFriends']),
-            username
+            username,
+            friends,
         }
     }
 
