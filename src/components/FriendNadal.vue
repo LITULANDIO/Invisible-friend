@@ -124,7 +124,8 @@ export default {
             amicNadal,
             wishNadal,
             myWishesNadal,
-            createWishesNadal
+            createWishesNadal,
+            wishesNadal
 
         }
     }
