@@ -1,13 +1,8 @@
 <template>
-<div  class="header-overlay"></div>
 <div id="modal">
   <div class="cont-modal">
       <div class="wraper-slot">
         <slot></slot>
-        Observa bé la imatge anota en un paper qui t'ha tocat, quan donguis a acceptar desapareixarà.
-      </div>
-      <div>
-          <div @click="onAcceptFriend" class="button">Acceptar</div>
       </div>
   </div>
 </div>
@@ -34,15 +29,15 @@ export default {
     justify-content: center;
     align-items: center;
     .cont-modal{
-        top: 2em;
-        width: 350px;
+        // margin: 0 auto;
+        // top: 2em;
+        width: 100%;
         height: auto;
-        box-shadow: #c7c7cc 0px 1px 9px;
-        position: absolute;
-        background: white;
+        // box-shadow: #c7c7cc 0px 1px 9px;
+        // background: white;
         z-index: 99999;
         border-radius: 20px;
-        padding: 25px;
+        //padding: 25px;
         .wraper-slot{
             margin-bottom: 15px;
             font-size: 1.2em;

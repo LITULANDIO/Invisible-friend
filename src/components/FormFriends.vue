@@ -1,5 +1,5 @@
 <template>
-    <div id="container-form">
+    <div id="container-form" v-if="store.state.show">
         <div class="form-friend">
             <div @click="onClose" class="form-close">
                 <img :src="require('@/assets/cancel.svg')" />
@@ -12,8 +12,8 @@
                     <input :class="{'border-red': _void}" type="text" placeholder="Last name friend" v-model="lastName">
                 </div>
                 <div>
-                    Nadals <input type="radio" value="nadal" v-model="category"/>
-                    Reis <input type="radio" value="reis" v-model="category"/>
+                    Nadals <input class="radio-but" type="radio" value="nadal" v-model="category"/>
+                    Reis <input class="radio-but" type="radio" value="reis" v-model="category"/>
                 </div>
                 <div class="form-upload">
                     <input type="file"
@@ -42,7 +42,7 @@ import requestFriends from '../api/requests';
 
 export default {
     name: 'FormFriends',
-    setup(){
+    setup(props, {emit}){
         const store = useStore();
         const name = ref('');
         const lastName = ref('');
@@ -102,12 +102,13 @@ export default {
             name,
             saveFriend,
             _void,
-            onClose: () => store.commit('SET_SHOW_MODAL', false),
+            onClose: () => emit('onClose'),
             showMenu: computed(() => store.state.show),
             onSelectedImage,
             localImage,
             onSelectImage,
-            category
+            category,
+            store
         }
     }
 
@@ -125,6 +126,9 @@ export default {
     // transition: transform 0.9s ease;
      &.open{
         transform: translateX(0em);
+    }
+    .radio-but{
+        width: 70px !important;
     }
     .form-friend{
         background-color: #EAEDED;
