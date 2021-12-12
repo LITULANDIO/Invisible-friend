@@ -103,9 +103,11 @@ export default {
                             title: 'Genial',
                             icon: 'success',
                             html: `Has escollit al teu amic invisible, pots veure més detall al teu perfil `,
-                            showConfirmButton: false
+                            }).then((result) =>{
+                                if (result.isConfirmed) {
+                                    router.push({name: 'friend' })
+                                }
                             })
-                            setTimeout(() => router.push({name: 'friend' }), 5000) 
 
                         await updateFriends({
                             id:inv.id,
