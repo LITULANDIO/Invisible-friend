@@ -36,7 +36,7 @@ export default {
             if(!inv.active){
                 if(inv.id == store.getters['getFriendId']){
                     inv.selected = false
-                     await updateFriends({id: inv.id, name: inv.name, picture: inv.picture, selected: inv.selected, friend: inv.friend, active: true, category: inv.category })
+                     await updateFriends({id: inv.id, name: inv.name, picture: inv.picture, selected: inv.selected, friend: inv.friend, active: true, category: inv.category, firstWish: inv.firstWish , secondWish: inv.secondWish, threeWish: inv.threeWish, fourWish: inv.fourWish, fiveWish: inv.fiveWish })
                     store.commit('auth/friendSelect', { friend: inv.friend, user: username.value, active: true, category: inv.category })
                     //store.commit('UPDATE_FRIENDS', friend.value)
                  }
