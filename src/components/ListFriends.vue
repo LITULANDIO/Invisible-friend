@@ -91,21 +91,21 @@ export default {
                             title: 'Oops...',
                             icon: 'warning',
                             html: `Ja has escollit el teu amic invisble de Reis`+
-                            ` <a  href="https://61b3efe31fcd5e0b11276cc9--amic-invisible.netlify.app/friend">Accedeix al teu perfil</a>`,
+                            ` <a  href="${window.location.hostname}/friend">Accedeix al teu perfil</a>`,
                             })
                      }else if(await isSelectedFriend('nadal') === true && friend.category === 'nadal'){
                          Swal.fire({
                             title: 'Oops...',
                             icon: 'warning',
                             html: `Ja has escollit el teu amic invisble de Nadal `+
-                            ` <a  href="https://61b3efe31fcd5e0b11276cc9--amic-invisible.netlify.app/friend">Accedeix al teu perfil</a>`,
+                            ` <a   href="${window.location.hostname}/friend">Accedeix al teu perfil</a>`,
                             })
                     }else{
                          Swal.fire({
                             title: 'Genial',
                             icon: 'success',
-                            html: `Has escollit a <strong>${inv.name}</strong> pots veure més detall al teu perfil ` +
-                            ` <a  href="https://61b3efe31fcd5e0b11276cc9--amic-invisible.netlify.app/friend">Accedeix al teu perfil</a>`,
+                            html: `Has escollit al teu amic, pots veure més detall al teu perfil ` +
+                            ` <a   href="${window.location.hostname}/friend">Accedeix al teu perfil</a>`,
                             showConfirmButton: false
                             })
                         await updateFriends({
