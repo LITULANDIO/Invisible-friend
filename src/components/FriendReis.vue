@@ -91,7 +91,7 @@ export default {
                   picture: inv.picture, 
                   selected: inv.selected, 
                   friend: inv.friend, 
-                  active: true, 
+                  active: inv.active, 
                   category: inv.category,
                   firstWish: wishesNadal.one, 
                   secondWish: wishesNadal.twoo, 
