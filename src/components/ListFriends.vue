@@ -90,24 +90,23 @@ export default {
                          Swal.fire({
                             title: 'Oops...',
                             icon: 'warning',
-                            html: `Ja has escollit el teu amic invisble de Reis`+
-                            ` <a  href="/friend">Accedeix al teu perfil</a>`,
+                            html: `Ja has escollit el teu amic invisble de Reis`,
                             })
                      }else if(await isSelectedFriend('nadal') === true && friend.category === 'nadal'){
                          Swal.fire({
                             title: 'Oops...',
                             icon: 'warning',
-                            html: `Ja has escollit el teu amic invisble de Nadal `+
-                            ` <a   href="/friend">Accedeix al teu perfil</a>`,
+                            html: `Ja has escollit el teu amic invisble de Nadal `,
                             })
                     }else{
                          Swal.fire({
                             title: 'Genial',
                             icon: 'success',
-                            html: `Has escollit al teu amic, pots veure més detall al teu perfil ` +
-                            ` <a   href="/friend">Accedeix al teu perfil</a>`,
+                            html: `Has escollit al teu amic invisible, pots veure més detall al teu perfil `,
                             showConfirmButton: false
                             })
+                            setTimeout(() => router.push({name: 'friend' }), 3000) 
+
                         await updateFriends({
                             id:inv.id,
                             name: inv.name, 
