@@ -1,5 +1,6 @@
 <template>
   <div>
+      <h1>Registre</h1>
       <form @submit.prevent="onRegister">
         <input type="text" v-model="userForm.name" placeholder="Usuari">
         <input type="text" v-model="userForm.email" placeholder="Email">
@@ -38,6 +39,27 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+div{
+    background: #EC7063 ;
+    height: 100vh;
+    h1{
+        font-family: monospace;
+        text-align: center;
+    }
+    padding: 15px;
+    form{
+        display: flex;
+        flex-direction: column;
+        input{
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        button{
+            font-family: monospace;
+            cursor: pointer;
+        }
+    }
+}
 
 </style>

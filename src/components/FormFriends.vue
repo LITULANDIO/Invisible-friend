@@ -57,7 +57,7 @@ export default {
             if(!name.value || !lastName.value || !localImage){
                 return _void.value = true;
             }else{
-                await createFriend({name: name.value, lastName: lastName.value, picture: fileCloudinary.value, category: category.value})
+                await createFriend({name: name.value, lastName: lastName.value, picture: fileCloudinary.value, friend: '', category: category.value, firstWish: '', secondWish: '', threeWish: '', fourWish: '', fiveWish:''   })
                 getInvisibleFriends();
                 name.value = '';
                 lastName.value = '';

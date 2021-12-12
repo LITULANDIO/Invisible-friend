@@ -1,11 +1,12 @@
 <template>
   <div>
+      <h1>LOGIN</h1>
       <form @submit.prevent="onLogin">
         <input type="text" v-model="userForm.email" placeholder="Email">
         <input type="password" v-model="userForm.password" placeholder="Contrassenya">
-        <button type="submit">Iniciar sesion</button>
+        <button type="submit">Iniciar sessió</button>
       </form>
-      <p @click="onGoRegister">¿No estàs registrar?</p>
+      <p @click="onGoRegister">¿No estàs registrat?</p>
   </div>
 </template>
 
@@ -40,6 +41,31 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+div{
+    background: #EC7063 ;
+    height: 100vh;
+    h1{
+        font-family: monospace;
+        text-align: center;
+    }
+    padding: 15px;
+    form{
+        display: flex;
+        flex-direction: column;
+        input{
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        button{
+            font-family: monospace;
+            cursor: pointer;
+        }
+    }
+    p{
+        text-align: center;
+        cursor: pointer;
+    }
+}
 
 </style>
