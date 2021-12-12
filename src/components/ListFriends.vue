@@ -105,7 +105,7 @@ export default {
                             html: `Has escollit al teu amic invisible, pots veure més detall al teu perfil `,
                             showConfirmButton: false
                             })
-                            setTimeout(() => router.push({name: 'friend' }), 3000) 
+                            setTimeout(() => router.push({name: 'friend' }), 5000) 
 
                         await updateFriends({
                             id:inv.id,
