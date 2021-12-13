@@ -1,5 +1,6 @@
 <template>
   <div>
+      <div v-if="countWishes > 0"><p class="font">Falten <strong>{{ countWishes }}</strong> persones per posar els desitjos</p></div>
       <div v-if="username == 'litus'">
           <div class="button">
             <button  @click="onOpenForm">Create friends invisible</button>
@@ -35,6 +36,7 @@ export default {
         const { getFriends } = requestFriends();
         const fr = computed(() => store.getters['getFriends'])
         const friends = ref();
+        const countWishes = ref();
 
         const getInvisibleFriends = async () =>{
             const friends = await getFriends();
@@ -48,9 +50,10 @@ export default {
             friends.value = mixedFriends;
         }
 
-        onBeforeMount(() =>{
+        onBeforeMount(async() =>{
             getInvisibleFriends();
             getFriendsListRandom();
+            await countWishesforFriend();
             
         });
         onBeforeUpdate(() =>{
@@ -63,11 +66,26 @@ export default {
             console.log(store.state.show)
         }
 
+         const countWishesforFriend = async () =>{
+            const friends = await getFriends();
+            let listWishes = [];
+
+            friends.forEach(friend => {
+                if(friend.firstWish){
+                    listWishes.push({wish: friend.firstWish})
+                }
+            });
+            countWishes.value = 13 - listWishes.length
+            console.log('oyeeee', countWishes.value)
+
+        }
+
         return{
             onOpenForm: () => store.commit('SET_SHOW_MODAL', true),
             onClose,
             username,
             friends,
+            countWishes
         }
     }
 
@@ -82,6 +100,10 @@ h1, h2{
 .button{
     text-align: center;
     margin-top: 2rem;
+}
+.font{
+    font-family: monospace;
+    text-align: center;
 }
 button{
     margin-left: 15px;

@@ -32,6 +32,19 @@ export default{
         console.log(friends);
     }
 
+    const countWishesforFriend = async () =>{
+      const friends = await getFriends();
+      let listWishes = [];
+
+      friends.forEach(friend => {
+          if(friend.firstWish){
+            listWishes.push({wish: friend.firstWish})
+          }
+      });
+      console.log(listWishes.length)
+
+    }
+
     const onGoFriend = () =>{
       console.log('query', route.query.id)
       router.push({name: 'friend' })
@@ -39,6 +52,7 @@ export default{
 
     checkAuthStatus();
     getInvisibleFriends();
+    countWishesforFriend();
 
     return{
      //username: computed(username.value)
