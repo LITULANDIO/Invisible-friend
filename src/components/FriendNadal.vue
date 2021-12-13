@@ -61,7 +61,7 @@
 <script>
 import requestFriends from '@/api/requests';
 import useAuth from '@/auth/composables/useAuth';
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted, onBeforeUpdate } from 'vue';
 import Swal from 'sweetalert2';
 
 export default {
@@ -90,7 +90,7 @@ export default {
           five: ''
         });
 
-        onMounted(() =>{
+        onBeforeUpdate(() =>{
           checkWishes();
         })
 
