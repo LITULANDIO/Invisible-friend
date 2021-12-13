@@ -88,11 +88,7 @@ export default {
           three: '',
           four: '',
           five: ''
-        });
-
-        onBeforeUpdate(() =>{
-          checkWishes();
-        })
+        });    
 
           const createWishesNadal = async () =>{
           const friends = await getFriends();
@@ -147,7 +143,8 @@ export default {
             wishesNadal.five = props.myWishesListNadal.wish5
           }
         }
-
+         checkWishes();
+         
         const updateMyWishes = async() =>{
           const friends = await getFriends();
           friends.forEach(async(inv) =>{
