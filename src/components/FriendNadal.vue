@@ -46,11 +46,11 @@
             <li v-if="myWishesListNadal.wish5" class="font">🎁 {{ myWishesListNadal.wish5 }}</li>
           </ul>
           <form @submit.prevent="updateMyWishes">
-           <input type="text" v-model="wishesNadal.one">
-           <input type="text" v-model="wishesNadal.twoo">
-           <input type="text" v-model="wishesNadal.three">
-           <input type="text" v-model="wishesNadal.four">
-           <input type="text" v-model="wishesNadal.five">
+           <input type="text" required v-model="wishesNadal.one">
+           <input type="text" required v-model="wishesNadal.twoo">
+           <input type="text" required v-model="wishesNadal.three">
+           <input type="text" required v-model="wishesNadal.four">
+           <input type="text" required v-model="wishesNadal.five">
               <button type="submit">Modificar desitjos</button>
           </form>
         </div>
@@ -144,7 +144,7 @@ export default {
           }
         }
          checkWishes();
-         
+
         const updateMyWishes = async() =>{
           const friends = await getFriends();
           friends.forEach(async(inv) =>{
