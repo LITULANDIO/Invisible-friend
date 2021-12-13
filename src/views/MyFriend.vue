@@ -60,14 +60,20 @@ export default {
 
         const getMyProfile = async (type) =>{
             const friends = await getFriends();
-            let myWishesNadal = [];
+            let myWishesNadal = null;
             let myWishesReis = [];
             
             const myProfile = friends.find(my => my.name === username.value && my.category === type)
             if(type === 'nadal' && myProfile){
               const { firstWish, secondWish, threeWish, fourWish, fiveWish } = myProfile;
               if(firstWish && secondWish && threeWish && fourWish && fiveWish){
-                myWishesNadal.push({wish: firstWish},{wish: secondWish},{wish: threeWish},{wish: fourWish}, {wish: fiveWish})
+                myWishesNadal = {
+                  wish1: firstWish,
+                  wish2: secondWish,
+                  wish3: threeWish,
+                  wish4: fourWish,
+                  wish5: fiveWish
+                }
                 myWishesListNadal.value = myWishesNadal;
               }
             }

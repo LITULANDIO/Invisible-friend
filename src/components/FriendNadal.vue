@@ -29,7 +29,7 @@
         <div class="jo" @click="myWishesNadal = !myWishesNadal">
           <h2>Els meus desitjos ✏️</h2>
         </div>
-           <form v-if="myWishesNadal && myWishesListNadal.length === 0" @submit.prevent="createWishesNadal" >
+           <form v-if="myWishesNadal && myWishesListNadal === null" @submit.prevent="createWishesNadal" >
               <input type="text" required placeholder="Primer desig" v-model="wishesNadal.one">
               <input type="text" required placeholder="Segón desig" v-model="wishesNadal.twoo">
               <input type="text" required placeholder="Tercer desig" v-model="wishesNadal.three">
@@ -37,9 +37,23 @@
               <input type="text" required placeholder="Cinqué desig" v-model="wishesNadal.five">
               <button type="submit">Guardar desitjos</button>
           </form>
-          <ul v-if="myWishesNadal && myWishesListNadal.length >=1" class="meus-desitjos">
-            <li class="font" v-for="wish in myWishesListNadal" :key="wish">🎁 {{ wish.wish }}</li>
+        <div v-if="myWishesNadal && myWishesListNadal">
+          <ul class="meus-desitjos">
+            <li v-if="myWishesListNadal.wish1" class="font">🎁 {{ myWishesListNadal.wish1 }}</li>
+            <li v-if="myWishesListNadal.wish2" class="font">🎁 {{ myWishesListNadal.wish2 }}</li>
+            <li v-if="myWishesListNadal.wish3" class="font">🎁 {{ myWishesListNadal.wish3 }}</li>
+            <li v-if="myWishesListNadal.wish4" class="font">🎁 {{ myWishesListNadal.wish4 }}</li>
+            <li v-if="myWishesListNadal.wish5" class="font">🎁 {{ myWishesListNadal.wish5 }}</li>
           </ul>
+          <form @submit.prevent="updateMyWishes">
+           <input type="text" v-model="wishesNadal.one">
+           <input type="text" v-model="wishesNadal.twoo">
+           <input type="text" v-model="wishesNadal.three">
+           <input type="text" v-model="wishesNadal.four">
+           <input type="text" v-model="wishesNadal.five">
+              <button type="submit">Modificar desitjos</button>
+          </form>
+        </div>
       </section>
     </div>
 </template>
@@ -47,7 +61,7 @@
 <script>
 import requestFriends from '@/api/requests';
 import useAuth from '@/auth/composables/useAuth';
-import { ref, reactive } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import Swal from 'sweetalert2';
 
 export default {
@@ -58,11 +72,11 @@ export default {
             required: true
         },
         myWishesListNadal:{
-            type: Array,
+            type: Object,
             required: true
         }
     },
-    setup(){
+    setup(props){
         const { getFriends, updateFriends } = requestFriends();
         const { username } = useAuth();
         const amicNadal = ref(false);
@@ -75,6 +89,10 @@ export default {
           four: '',
           five: ''
         });
+
+        onMounted(() =>{
+          checkWishes();
+        })
 
           const createWishesNadal = async () =>{
           const friends = await getFriends();
@@ -120,12 +138,58 @@ export default {
           })
         }
 
+        const checkWishes = () =>{
+          if(props.myWishesListNadal.wish1){
+            wishesNadal.one = props.myWishesListNadal.wish1
+            wishesNadal.twoo = props.myWishesListNadal.wish2
+            wishesNadal.three = props.myWishesListNadal.wish3
+            wishesNadal.four = props.myWishesListNadal.wish4
+            wishesNadal.five = props.myWishesListNadal.wish5
+          }
+        }
+
+        const updateMyWishes = async() =>{
+          const friends = await getFriends();
+          friends.forEach(async(inv) =>{
+            if(inv.name == username.value){
+              try{
+                await updateFriends({
+                  id: inv.id, 
+                  name: inv.name, 
+                  picture: inv.picture, 
+                  selected: inv.selected, 
+                  friend: inv.friend, 
+                  active: inv.active, 
+                  category: inv.category,
+                  firstWish: wishesNadal.one, 
+                  secondWish: wishesNadal.twoo, 
+                  threeWish: wishesNadal.three, 
+                  fourWish: wishesNadal.four, 
+                  fiveWish: wishesNadal.five
+                })
+                Swal.fire({
+                    title: 'Modificar',
+                    icon: 'success',
+                    html: `Genial s'han modificat correctament els teus desitjos de nadal`
+                  })
+              }catch(error){
+                 Swal.fire({
+                    title: 'Error',
+                    icon: 'warning',
+                    html: `Ooops! ha hagut algun problema, torna-ho a intentar`
+                  })
+              }
+            }
+          })
+        }
+
         return{
             amicNadal,
             wishNadal,
             myWishesNadal,
             createWishesNadal,
-            wishesNadal
+            wishesNadal,
+            updateMyWishes
 
         }
     }
@@ -187,6 +251,9 @@ export default {
     //   position: absolute;
     //   margin-top: 15rem;
     // }
+    .content-wishes{
+      
+    }
     ul{
       list-style: none;
     }
