@@ -2,7 +2,7 @@
     <div v-if="friend.category === 'nadal'" class="content">
       <div class="presupost">
         <div class="font">Pressupost: max <span class="preu">20€</span></div>
-        <div class="font">Dia: 24 de decembre del 2021</div>
+        <div class="font">Dia: 24 de decembre del 2022</div>
       </div>
 
       <section class="nadal">
