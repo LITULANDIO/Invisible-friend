@@ -212,6 +212,7 @@ export default {
                 width: 100%;
                 border-radius: 20px;
                 opacity: 0.9;
+                background: black;
             }
             .show-svg{
                 display: block;
