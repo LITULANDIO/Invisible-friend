@@ -6,7 +6,7 @@
             <button  @click="onOpenForm">Create friends invisible</button>
           </div>
         <Modal>
-            <FormFriends v-if="username == 'litus'" @onClose="onClose"/>
+            <FormFriends v-if="username == 'Litus'" @onClose="onClose"/>
         </Modal>
       </div>
 
