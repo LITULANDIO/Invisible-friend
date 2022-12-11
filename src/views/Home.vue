@@ -1,7 +1,7 @@
 <template>
   <div>
       <div v-if="countWishes > 0"><p class="font">Falten <strong>{{ countWishes }}</strong> persones per posar els desitjos</p></div>
-      <div v-if="username == 'litus'">
+      <div v-if="username == 'Litus'">
           <div class="button">
             <button  @click="onOpenForm">Create friends invisible</button>
           </div>
