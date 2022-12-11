@@ -2,7 +2,7 @@
    <div v-if="friend.category === 'reis'" class="content">
       <div class="presupost">
         <div class="font">Presupost: max <span class="preu">50€</span></div>
-        <div class="font">Dia: 6 de gener del 2022</div>
+        <div class="font">Dia: 6 de gener del 2023</div>
       </div>
 
       <section class="reis">
