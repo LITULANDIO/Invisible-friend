@@ -1,12 +1,12 @@
 <template>
     <div v-if="friend.category === 'nadal'" class="content">
       <div class="presupost">
-        <div class="font">Pressupost: max <span class="preu">20€</span></div>
-        <div class="font">Dia: 24 de decembre del 2022</div>
+        <div class="font">Pressupost: max <span class="preu">35€/50€</span></div>
+        <div class="font">Dia: 6 de gener del 2023</div>
       </div>
 
       <section class="nadal">
-        <div class="title"><h1>Amic invisible Nadal 🎄</h1></div>
+        <div class="title"><h1>Amic invisible Reis 🤴🏿</h1></div>
 
         <div class="amic" @click="amicNadal = !amicNadal">
           <h2>El meu amic invisible <span v-if="!amicNadal">🙈</span><span v-if="amicNadal">🙉</span></h2>
