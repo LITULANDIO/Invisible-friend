@@ -76,7 +76,7 @@ export default {
                     listWishes.push({wish: friend.firstWish})
                 }
             });
-            countWishes.value = 13 - listWishes.length
+            countWishes.value = 15 - listWishes.length
             console.log('oyeeee', countWishes.value)
 
         }
