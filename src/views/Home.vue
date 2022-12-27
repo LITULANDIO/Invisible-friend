@@ -10,11 +10,12 @@
         </Modal>
       </div>
 
-        <h1>Amic invisble Nadal 🎄 </h1>
+        <!--<h1>Amic invisble Nadal 🎄 </h1>-->
+            <h1>Amic invisble Reis 👑</h1>
         <ListFriends :friends="friends" category="nadal"/>
 
-         <h1>Amic invisble Reis 👑</h1>
-        <ListFriends :friends="friends" category="reis"/>
+         <!--<h1>Amic invisble Reis 👑</h1>
+        <ListFriends :friends="friends" category="reis"/> -->
   </div>
 </template>
 
