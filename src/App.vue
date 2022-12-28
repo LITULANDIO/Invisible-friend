@@ -19,6 +19,7 @@ export default{
   name: 'App',
   components: { Navbar },
   setup(){
+    JSON.parse(localStorage.getItem('vuex')).auth.friend = []
     const store = useStore();
     const router = useRouter();
     const route = useRoute();
